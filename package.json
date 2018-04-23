@@ -1,0 +1,13 @@
+{
+  "name": "content-scraper",
+  "version": "0.0.1",
+  "description": "Content Scraper",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/severude/Content-Scraper"
+  },
+  "dependencies": {
+    "file-system": "^2.2.2"
+  }
+}
