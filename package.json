@@ -11,8 +11,6 @@
     "url": "https://github.com/severude/Content-Scraper"
   },
   "dependencies": {
-    "axios": "^0.18.0",
-    "cheerio": "^1.0.0-rc.2",
-    "file-system": "^2.2.2"
+    "scrape-it": "^5.0.4"
   }
 }
