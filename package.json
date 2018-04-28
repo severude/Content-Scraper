@@ -11,6 +11,7 @@
     "url": "https://github.com/severude/Content-Scraper"
   },
   "dependencies": {
+    "json2csv": "^4.1.2",
     "scrape-it": "^5.0.4"
   }
 }

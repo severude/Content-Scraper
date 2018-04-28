@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const scrapeIt = require("scrape-it");
+const Json2csvParser = require('json2csv').Parser;
 
 // Url constants
 const siteUrl = 'http://shirts4mike.com/shirts.php';
@@ -31,17 +32,28 @@ scrapeIt(siteUrl, {
         productList.push(productUrl + product.url);
       });
       // Scrape each product
-      productList.forEach(product => {
-        scrapeIt(product, {
-          price: '.shirt-details h1 span',
-          title: '.shirt-details h1',
-          imageUrl: {
+      productList.forEach(productUrl => {
+        scrapeIt(productUrl, {
+          Price: '.shirt-details h1 span',
+          Title: '.shirt-details h1',
+          ImageUrl: {
             selector: '.shirt-picture span img',
-            attr: 'src'}
+            attr: 'src'},
+          Url: '.breadcrumb',
+          Time: '.footer .wrapper p'
         }).then(({ data, response }) => {
+          // Message the results into the correct format
           const regex = /\$\d+ /;
-          data.title = data.title.replace(regex, '');
-          console.log(data);
+          data.Title = data.Title.replace(regex, '');
+          data.Url = productUrl;
+          let date = new Date();
+          data.Time = date.toLocaleString();
+          // Convert to csv data
+          const fields = ['Price', 'Title', 'ImageUrl', 'Url', 'Time'];
+          const json2csvParser = new Json2csvParser({ fields });
+          const csv = json2csvParser.parse(data);
+           
+          console.log(csv);          
         });
       });
     } else {
