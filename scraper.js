@@ -32,7 +32,17 @@ scrapeIt(siteUrl, {
       });
       // Scrape each product
       productList.forEach(product => {
-        console.log(product);
+        scrapeIt(product, {
+          price: '.shirt-details h1 span',
+          title: '.shirt-details h1',
+          imageUrl: {
+            selector: '.shirt-picture span img',
+            attr: 'src'}
+        }).then(({ data, response }) => {
+          const regex = /\$\d+ /;
+          data.title = data.title.replace(regex, '');
+          console.log(data);
+        });
       });
     } else {
       // Connection error logic
