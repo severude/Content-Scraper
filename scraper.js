@@ -65,7 +65,12 @@ scrapeIt(siteUrl, {
           console.log(`Site ${siteUrl} was successfully scraped to ${csvFileName}`);
       })
     } else {
-      // Connection error logic
-      console.log(`There’s been a ${response.statusCode} error. Cannot connect to ${siteUrl}`);
+      // Error message logging
+      const errorFileName = 'scraper-error.log';
+      const date = new Date();
+      const message = `There’s been a ${response.statusCode} error. Cannot connect to ${siteUrl}`;
+      const errorMessage = `[${date}] <${message}>\n`;
+      fs.appendFileSync(errorFileName, errorMessage);
+      console.error(message);
     }
   });
