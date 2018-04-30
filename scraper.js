@@ -16,6 +16,15 @@ if(!fs.existsSync('./data')) {
     fs.mkdirSync('./data');
 }
 
+// Error message logging to file
+function printErrorMessage(message) {
+  const errorFileName = 'scraper-error.log';
+  const date = new Date();
+  const errorMessage = `[${date}] <${message}>\n`;
+  fs.appendFileSync(errorFileName, errorMessage);
+  console.error(message);
+}
+
 // Scrape the site url for a list of product urls
 scrapeIt(siteUrl, {
   // Capture the product url for each li under ul.products
@@ -27,7 +36,8 @@ scrapeIt(siteUrl, {
             attr: "href"
         }
     }
-}}).then(({ data, response }) => {
+  }
+}).then(({ data, response }) => {
     // If site url has successfully been scraped, then scrape each product
     if(response.statusCode === 200) {
       // Build final product urls
@@ -46,12 +56,18 @@ scrapeIt(siteUrl, {
           Time: '.footer .wrapper p'
         }).then(({ data, response }) => {
           // Massage the results into the correct format
-          const regex = /\$\d+ /;
-          data.Title = data.Title.replace(regex, '');
-          data.Url = product;
-          let date = new Date();
-          data.Time = date.toLocaleString();
-          productData.push(data);
+          if(response.statusCode === 200) {
+            const regex = /\$\d+ /;
+            data.Title = data.Title.replace(regex, '');
+            data.Url = product;
+            let date = new Date();
+            data.Time = date.toLocaleString();
+            productData.push(data);
+          } else {
+            // Print out error message with statusCode for the product page
+            const message = `There’s been a ${response.statusCode} error while connecting to ${product}`;
+            printErrorMessage(message);
+          }
         }));
       });
       // All scraping is done - process the data
@@ -65,12 +81,12 @@ scrapeIt(siteUrl, {
           console.log(`Site ${siteUrl} was successfully scraped to ${csvFileName}`);
       })
     } else {
-      // Error message logging
-      const errorFileName = 'scraper-error.log';
-      const date = new Date();
-      const message = `There’s been a ${response.statusCode} error. Cannot connect to ${siteUrl}`;
-      const errorMessage = `[${date}] <${message}>\n`;
-      fs.appendFileSync(errorFileName, errorMessage);
-      console.error(message);
+      // Print out error message with statusCode for the main page
+      const message = `There’s been a ${response.statusCode} error while connecting to ${siteUrl}`;
+      printErrorMessage(message);
     }
-  });
+  }).catch(error => {
+      // Print out a connection error message
+      const message = `The domain name can't be resolved. Cannot connect to ${siteUrl}`;
+      printErrorMessage(message);
+});
