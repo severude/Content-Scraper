@@ -5,3 +5,5 @@ Imagine you work for a price comparison website. You’ve been given the task to
 # Instructions
 1) "npm install" to install all dependencies
 2) "node scraper.js" or "npm start" to run the program
+
+Excellent work! Your Content Scraper proj is awesome! You've selected great packages to use. Your code and directory are clean and well organized. Your app nicely scrapes and crawls and exports the data to the correct file in the correct folder. And you hit some exceeds. That's great to see! Fantastic work all around!
