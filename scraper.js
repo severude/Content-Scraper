@@ -4,6 +4,7 @@
 const fs = require('fs');
 const scrapeIt = require("scrape-it");
 const Json2csvParser = require('json2csv').Parser;
+const moment = require('moment');
 
 // Url constants
 const siteUrl = 'http://shirts4mike.com/shirts.php';
@@ -75,7 +76,7 @@ scrapeIt(siteUrl, {
           const fields = ['Title', 'Price', 'ImageUrl', 'Url', 'Time'];
           const json2csvParser = new Json2csvParser({ fields });
           const csvData = json2csvParser.parse(productData);
-          const fileDate = new Date().toLocaleDateString();
+          const fileDate = moment().format('YYYY-MM-DD');
           const csvFileName = `./data/${fileDate}.csv`;
           fs.writeFileSync(csvFileName, csvData);
           console.log(`Site ${siteUrl} was successfully scraped to ${csvFileName}`);
