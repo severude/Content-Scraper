@@ -49,4 +49,3 @@ Temporary Items
 node_modules/
 data/
 scraper-error.log
-package-lock.json
